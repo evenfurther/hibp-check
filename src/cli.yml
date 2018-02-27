@@ -1,0 +1,31 @@
+name: hibp-check
+author: Samuel Tardieu <sam@rfc1149.net>
+about: Check https://haveibeenpwned.com/ for password compromission without revealing the password
+args:
+  - password:
+      short: -s
+      long: --show-password
+      help: Show the pwned passwords in output. If absent, line number or identifying information will be shown instead
+subcommands:
+  - keepass:
+      about: Use a KeePass (kdbx4) database as passwords source
+      args:
+        - FILE:
+            help: The file containing the passwords to check
+            required: true
+        - key-file:
+            short: -k
+            long: --key-file
+            takes_value: true
+            value_name: FILE
+            help: The optional key file
+        - password:
+            short: -p
+            long: --password
+            takes_value: true
+            value_name: PASSWORD
+            help: The optional password (unsafe on the command line)
+        - ask-password:
+            short: -a
+            long: --ask-password
+            help: Get the password from the terminal

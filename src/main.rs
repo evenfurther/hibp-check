@@ -1,58 +1,38 @@
-#[macro_use]
-extern crate clap;
-extern crate csv;
-extern crate itertools;
-extern crate reqwest;
-extern crate sha1;
-
+use clap::{load_yaml, App};
+use failure::Error;
 use itertools::Itertools;
-use std::collections::hash_set::HashSet;
-use std::collections::hash_map::HashMap;
-use std::str;
+use std::cmp::Reverse;
+mod hibp;
+mod loaders;
 
-fn main() {
-    run().unwrap();
-}
-
-fn run() -> Result<(), reqwest::Error> {
-    let p = ["passw0rd", "sdklfjlsdkj", "123456"];
-    let pawned = check_passwords(&p)?;
-    for p in pawned {
-        println!("Pawned: {}", p);
+fn main() -> Result<(), Error> {
+    env_logger::init();
+    let yaml = load_yaml!("cli.yml");
+    let matches = App::from_yaml(yaml).get_matches();
+    let mut entries = Vec::new();
+    if let Some(matches) = matches.subcommand_matches("keepass") {
+        entries = loaders::keepass::load_from_subcommand(&matches)?;
+    }
+    let passwords: Vec<&str> = entries.iter().map(|e| e.password.as_str()).collect();
+    let pwned = hibp::check_passwords(&passwords)?;
+    let show_passwords = matches.occurrences_of("password") > 0;
+    for (entry, n) in entries
+        .into_iter()
+        .zip(pwned.into_iter())
+        .filter(|&(_, n)| n > 0)
+        .sorted_by_key(|&(_, n)| Reverse(n))
+    {
+        print!(
+            "Password for {} found {} time{}",
+            entry.designator,
+            n,
+            if n > 1 { "s" } else { "" }
+        );
+        if show_passwords {
+            println!(" ({})", entry.password);
+        } else {
+            println!();
+        }
     }
     Ok(())
-}
-
-fn check_passwords<'a>(passwords: &'a [&'a str]) -> Result<Vec<&'a str>, reqwest::Error> {
-    let mut sha1 = sha1::Sha1::new();
-    let hashed: HashMap<String, &'a str> = passwords
-        .iter()
-        .map(|&p| {
-            sha1.reset();
-            sha1.update(p.as_bytes());
-            (sha1.hexdigest().to_uppercase(), p)
-        })
-        .collect::<HashMap<_, _>>();
-    let sorted: Vec<&[u8]> = hashed.keys().map(|s| s.as_bytes()).sorted();
-    sorted
-        .into_iter()
-        .group_by(|&e| &e[..5])
-        .into_iter()
-        .flat_map(|(prefix, entries)| {
-            match reqwest::get(&format!(
-                "https://api.pwnedpasswords.com/range/{}",
-                str::from_utf8(prefix).unwrap()
-            )).and_then(|mut r| r.text())
-            {
-                Ok(lst) => {
-                    let pawned = lst.lines().map(|s| &s.as_bytes()[..35]).collect::<HashSet<_>>();
-                    entries
-                        .filter(|e| pawned.contains(&e[5..]))
-                        .map(|e| Ok(*hashed.get(str::from_utf8(e).unwrap()).unwrap()))
-                        .collect_vec()
-                }
-                Err(e) => vec![Err(e)],
-            }
-        })
-        .collect::<Result<Vec<_>, _>>()
 }

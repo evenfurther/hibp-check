@@ -2,12 +2,21 @@
 authors = ["Samuel Tardieu <sam@rfc1149.net>"]
 name = "hibp-check"
 version = "0.1.0"
+edition = "2018"
 
 [dependencies]
-clap = "2.30.0"
-csv = "0.15.0"
-itertools = "0.7.6"
-reqwest = "0.8.5"
+env_logger = "0.6"
+failure = "0.1.1"
+indicatif = "0.11"
+itertools = "0.8"
+log = "0.4.1"
+reqwest = "0.9"
+kdbx4 = "0.4.1"
+rpassword = "2.1.0"
+
+[dependencies.clap]
+features = ["yaml"]
+version = "2.30.0"
 
 [dependencies.sha1]
 features = ["std"]
