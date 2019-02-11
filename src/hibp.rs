@@ -2,6 +2,7 @@ use failure::{format_err, Error};
 use indicatif::ProgressBar;
 use itertools::Itertools;
 use log::debug;
+use rayon::prelude::*;
 use reqwest::Client;
 use sha1::Sha1;
 use std::collections::hash_map::HashMap;
@@ -54,12 +55,16 @@ pub fn check_passwords(passwords: &[&str]) -> Result<Vec<usize>, Error> {
             (sha1.hexdigest().to_uppercase(), i)
         })
         .sorted()
-        .group_by(|(sha, _)| sha.chars().take(5).collect::<String>());
-    let result = hashed
+        .group_by(|(sha, _)| sha.chars().take(5).collect::<String>())
         .into_iter()
+        .map(|(g, e)| (g, e.collect_vec()))
+        .collect_vec();
+    let result = hashed
+        .into_par_iter()
         .map(|(prefix, entries)| {
             pwned_suffixes(&prefix).map(|pwned| {
                 entries
+                    .into_iter()
                     .map(|(e, i)| {
                         pb.inc(1);
                         (i, pwned.get(&e[5..]).cloned().unwrap_or(0))
