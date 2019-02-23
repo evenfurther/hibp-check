@@ -13,6 +13,7 @@ fn main() -> Result<(), Error> {
     if let Some(matches) = matches.subcommand_matches("keepass") {
         entries = loaders::keepass::load_from_subcommand(&matches)?;
     }
+    loaders::remove_common_prefix(&mut entries);
     let passwords: Vec<&str> = entries.iter().map(|e| e.password.as_str()).collect();
     let pwned = hibp::check_passwords(&passwords)?;
     let show_passwords = matches.occurrences_of("password") > 0;
