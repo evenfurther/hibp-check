@@ -63,10 +63,10 @@ pub fn check_passwords(passwords: &[&str]) -> Result<Vec<usize>, Error> {
         .into_par_iter()
         .map(|(prefix, entries)| {
             pwned_suffixes(&prefix).map(|pwned| {
+                pb.inc(entries.len() as u64);
                 entries
                     .into_iter()
                     .map(|(e, i)| {
-                        pb.inc(1);
                         (i, pwned.get(&e[5..]).cloned().unwrap_or(0))
                     })
                     .collect_vec()
