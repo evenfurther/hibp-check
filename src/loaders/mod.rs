@@ -8,8 +8,12 @@ pub struct Entry {
 fn common_prefix(entries: &[Entry]) -> Option<String> {
     let first = &entries.get(0)?.designator;
     for (i, _) in first.rmatch_indices('/') {
-        let prefix = &first[0..i + 1];
-        if entries.iter().skip(1).all(|e| e.designator.starts_with(prefix)) {
+        let prefix = &first[0..=i];
+        if entries
+            .iter()
+            .skip(1)
+            .all(|e| e.designator.starts_with(prefix))
+        {
             return Some(prefix.to_owned());
         }
     }

@@ -66,9 +66,7 @@ pub fn check_passwords(passwords: &[&str]) -> Result<Vec<usize>, Error> {
                 pb.inc(entries.len() as u64);
                 entries
                     .into_iter()
-                    .map(|(e, i)| {
-                        (i, pwned.get(&e[5..]).cloned().unwrap_or(0))
-                    })
+                    .map(|(e, i)| (i, pwned.get(&e[5..]).cloned().unwrap_or(0)))
                     .collect_vec()
             })
         })
