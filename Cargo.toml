@@ -17,7 +17,7 @@ rayon = "1.0.3"
 
 [dependencies.clap]
 features = ["yaml"]
-version = "2.30.0"
+version = "2.33.0"
 
 [dependencies.sha1]
 features = ["std"]
