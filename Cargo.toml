@@ -12,7 +12,7 @@ itertools = "0.8"
 log = "0.4.8"
 reqwest = "0.9"
 kdbx4 = "0.4.1"
-rpassword = "3.0.2"
+rpassword = "4.0.1"
 rayon = "1.1.0"
 
 [dependencies.clap]
