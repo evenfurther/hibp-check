@@ -70,9 +70,11 @@ fn hashed_passwords(passwords: &[&str]) -> Vec<Vec<(String, usize)>> {
         .into_par_iter()
         .flat_map(|range| {
             let mut sha1 = Sha1::new();
+            let start = range.start;
             passwords[range]
                 .iter()
                 .enumerate()
+                .map(|(i, p)| (i + start, p))
                 .map(|(i, &p)| {
                     sha1.reset();
                     sha1.update(p.as_bytes());
