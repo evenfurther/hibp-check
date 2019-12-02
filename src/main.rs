@@ -5,10 +5,10 @@ use itertools::Itertools;
 use std::cmp::Reverse;
 mod hibp;
 mod loaders;
+mod network;
 
 #[tokio::main]
 pub async fn main() -> Result<(), Error> {
-    env_logger::init();
     let yaml = load_yaml!("cli.yml");
     let matches = App::from_yaml(yaml).get_matches();
     let mut entries = Vec::new();
