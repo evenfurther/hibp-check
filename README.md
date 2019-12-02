@@ -51,3 +51,8 @@ your password using the `ps` Unix command.
 
 Also, if you want the compromised passwords to appeared in plain text on the console,
 you can add the `--show-password` before `keepass` on the command line.
+
+### Can I trust you with my password database?
+
+Absolutely not, please check the code yourself. The only crate able to do network access
+used in this project is `reqwest` and it is only referenced in `src/network.rs`.
