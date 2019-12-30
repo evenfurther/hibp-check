@@ -26,4 +26,4 @@ version = "0.6.0"
 
 [dependencies.reqwest]
 features = ["gzip"]
-version = "0.10.0-alpha.2"
+version = "0.10.0"
