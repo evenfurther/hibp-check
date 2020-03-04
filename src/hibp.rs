@@ -8,10 +8,13 @@ use sha1::Sha1;
 use std::collections::hash_map::HashMap;
 use std::str;
 
+#[derive(Eq, Ord, PartialEq, PartialOrd)]
+struct Id(usize);
+
 /// Given `entries` consisting in `(hash, id)` couples with all hashes starting with
 /// the same prefix, associate each id with the number of times this has has been
 /// pwned.
-async fn check_prefix<ID>(entries: Vec<(String, ID)>) -> Result<Vec<(ID, usize)>, Error> {
+async fn check_prefix(entries: Vec<(String, Id)>) -> Result<Vec<(Id, usize)>, Error> {
     let prefix = &entries[0].0[..5];
     let pwned = pwned_suffixes(prefix).await?;
     Ok(entries
@@ -34,7 +37,7 @@ fn split_range(len: usize, parts: usize) -> Vec<std::ops::Range<usize>> {
 /// Given a list of passwords, return a list of `(prefix, items)` with `prefix`
 /// being the prefix of the hashed password and every item being a couple
 /// `(hash, index)` where `index` is the password index in the original list.
-fn hashed_passwords(passwords: &[&str]) -> Vec<Vec<(String, usize)>> {
+fn hashed_passwords(passwords: &[&str]) -> Vec<Vec<(String, Id)>> {
     split_range(passwords.len(), num_cpus::get())
         .into_par_iter()
         .flat_map(|range| {
@@ -43,7 +46,7 @@ fn hashed_passwords(passwords: &[&str]) -> Vec<Vec<(String, usize)>> {
             passwords[range]
                 .iter()
                 .enumerate()
-                .map(|(i, p)| (i + start, p))
+                .map(|(i, p)| (Id(i + start), p))
                 .map(|(i, &p)| {
                     sha1.reset();
                     sha1.update(p.as_bytes());
