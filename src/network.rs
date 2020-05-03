@@ -1,7 +1,7 @@
 //! This module is the only one which should be allowed to perform network requests
 //! in order to ease auditing. It contains a single function.
 
-use failure::{ensure, Error};
+use anyhow::{ensure, Error};
 use lazy_static::lazy_static;
 use reqwest::Client;
 

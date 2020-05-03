@@ -1,5 +1,5 @@
+use anyhow::Error;
 use clap::{load_yaml, App};
-use failure::Error;
 use indicatif::ProgressBar;
 use itertools::Itertools;
 use std::cmp::Reverse;
