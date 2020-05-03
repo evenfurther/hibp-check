@@ -1,6 +1,6 @@
 use super::Entry;
+use anyhow::Error;
 use clap::ArgMatches;
-use failure::Error;
 use kdbx4::{CompositeKey, Kdbx4};
 use std::path::Path;
 

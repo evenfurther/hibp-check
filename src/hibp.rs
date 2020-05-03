@@ -1,5 +1,5 @@
 use crate::network;
-use failure::{format_err, Error};
+use anyhow::{format_err, Error};
 use futures::future::{self, FutureExt};
 use indicatif::ProgressBar;
 use itertools::Itertools;
