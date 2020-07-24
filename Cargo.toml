@@ -6,7 +6,7 @@ edition = "2018"
 
 [dependencies]
 anyhow = "1.0"
-indicatif = "0.14"
+indicatif = "0.15"
 itertools = "0.9"
 kdbx4 = "0.4.2"
 rpassword = "4.0.5"
