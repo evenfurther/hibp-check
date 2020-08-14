@@ -17,7 +17,7 @@ lazy_static = "1.4.0"
 
 [dependencies.clap]
 features = ["yaml"]
-version = "2.33.2"
+version = "2.33.3"
 
 [dependencies.sha1]
 features = ["std"]
