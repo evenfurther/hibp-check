@@ -28,5 +28,5 @@ features = ["gzip"]
 version = "0.10.7"
 
 [dependencies.tokio]
-version = "0.2.22"
+version = "0.3.0"
 features = ["macros"]
