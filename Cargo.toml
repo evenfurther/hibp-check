@@ -6,11 +6,11 @@ edition = "2018"
 
 [dependencies]
 anyhow = "1.0"
-indicatif = "0.15"
+indicatif = "0.16"
 itertools = "0.10"
 kdbx4 = "0.4.2"
 rpassword = "5.0.1"
-futures = "0.3.14"
+futures = "0.3.15"
 rayon = "1.5.0"
 num_cpus = "1.13.0"
 lazy_static = "1.4.0"
@@ -28,5 +28,5 @@ features = ["gzip"]
 version = "0.11"
 
 [dependencies.tokio]
-version = "1.4"
+version = "1.5"
 features = ["macros", "rt-multi-thread"]
