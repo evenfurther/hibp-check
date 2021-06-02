@@ -11,7 +11,7 @@ itertools = "0.10"
 kdbx4 = "0.4.2"
 rpassword = "5.0.1"
 futures = "0.3.15"
-rayon = "1.5.0"
+rayon = "1.5.1"
 num_cpus = "1.13.0"
 lazy_static = "1.4.0"
 
