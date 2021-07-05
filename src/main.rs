@@ -13,7 +13,7 @@ pub async fn main() -> Result<(), Error> {
     let matches = App::from_yaml(yaml).get_matches();
     let mut entries = Vec::new();
     if let Some(matches) = matches.subcommand_matches("keepass") {
-        entries = loaders::keepass::load_from_subcommand(&matches)?;
+        entries = loaders::keepass::load_from_subcommand(matches)?;
     }
     loaders::remove_common_prefix(&mut entries);
     let passwords: Vec<&str> = entries.iter().map(|e| e.password.as_str()).collect();

@@ -69,7 +69,7 @@ pub async fn check_passwords(
     passwords: &[&str],
     pb: Option<&ProgressBar>,
 ) -> Result<Vec<usize>, Error> {
-    let occurrences = future::join_all(hashed_passwords(&passwords).into_iter().map(|entries| {
+    let occurrences = future::join_all(hashed_passwords(passwords).into_iter().map(|entries| {
         let len = entries.len();
         check_prefix(entries).map(move |result| {
             if let Some(pb) = pb {
