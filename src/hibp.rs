@@ -19,7 +19,7 @@ async fn check_prefix(entries: Vec<(String, Id)>) -> Result<Vec<(Id, usize)>, Er
     let pwned = pwned_suffixes(prefix).await?;
     Ok(entries
         .into_iter()
-        .map(|(e, i)| (i, pwned.get(&e[5..]).cloned().unwrap_or(0)))
+        .map(|(e, i)| (i, pwned.get(&e[5..]).copied().unwrap_or(0)))
         .collect_vec())
 }
 
