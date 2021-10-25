@@ -15,7 +15,11 @@ lazy_static! {
 /// a given prefix.
 pub async fn hibp_network_request(prefix: &str) -> Result<String, Error> {
     let url = format!("{}/{}", HIBP_BASE, prefix);
-    let response = CLIENT.get(&url).send().await?;
+    let response = CLIENT
+        .get(&url)
+        .header("Add-Padding", "true")
+        .send()
+        .await?;
     ensure!(
         response.status().is_success(),
         "received error status code for {}: {}",
