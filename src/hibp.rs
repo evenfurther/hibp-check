@@ -96,12 +96,10 @@ pub async fn pwned_suffixes(prefix: &str) -> Result<HashMap<String, usize>, Erro
     let lst = network::hibp_network_request(prefix).await?;
     lst.lines()
         .map(|l| {
-            let mut s = l.split(':');
-            let suffix = s.next().ok_or_else(|| format_err!("no entry found"))?;
-            let count = s
-                .next()
-                .ok_or_else(|| format_err!("no count found on line {}", l))?
-                .parse::<usize>()?;
+            let (suffix, count) = l
+                .split_once(':')
+                .ok_or_else(|| format_err!("no count found on line"))?;
+            let count = count.parse::<usize>()?;
             Ok((suffix.to_owned(), count))
         })
         .collect()
