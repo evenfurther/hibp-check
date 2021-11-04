@@ -22,9 +22,8 @@ async fn check_prefix(entries: Vec<(String, &str)>) -> Result<Vec<(&str, usize)>
 
 /// Group passwords by hash prefix.
 ///
-/// Given a list of passwords, return a list of `(prefix, items)` with `prefix`
-/// being the prefix of the hashed password and every item being a couple
-/// `(hash, password)`.
+/// Given a list of passwords, return a list of list of `(hash, password)`
+/// grouped by prefix.
 fn hashed_passwords<'a>(passwords: &[&'a str]) -> Vec<Vec<(String, &'a str)>> {
     passwords
         .into_par_iter()
@@ -76,4 +75,27 @@ pub async fn pwned_suffixes(prefix: &str) -> Result<HashMap<String, usize>, Erro
             Ok((suffix.to_owned(), count))
         })
         .collect()
+}
+
+#[test]
+fn test_hashed_passwords() {
+    let passwords = vec!["BWE!y4xj:i", "NvLK25b+", "xQS?"];
+    let hashed = hashed_passwords(&passwords);
+    let expected = vec![
+        vec![
+            (
+                String::from("8E7334AB061EAB6673D2C591D6C77CEEE12DE961"),
+                "xQS?",
+            ),
+            (
+                String::from("8E7336BBDBE0B7F31DE9A06B053ECDF5E356A946"),
+                "BWE!y4xj:i",
+            ),
+        ],
+        vec![(
+            String::from("EF867658E9572AC965BBDC5212FAE656570DB09B"),
+            "NvLK25b+",
+        )],
+    ];
+    assert_eq!(expected, hashed);
 }
