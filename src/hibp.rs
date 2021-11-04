@@ -8,18 +8,15 @@ use sha1::{Digest, Sha1};
 use std::collections::hash_map::HashMap;
 use std::str;
 
-#[derive(Eq, Ord, PartialEq, PartialOrd)]
-struct Id(usize);
-
-/// Given `entries` consisting in `(hash, id)` couples with all hashes starting with
-/// the same prefix, associate each id with the number of times this has has been
+/// Given `entries` consisting in `(hash, password)` couples with all hashes starting with
+/// the same prefix, associate each password with the number of times this has has been
 /// pwned.
-async fn check_prefix(entries: Vec<(String, Id)>) -> Result<Vec<(Id, usize)>, Error> {
+async fn check_prefix(entries: Vec<(String, &str)>) -> Result<Vec<(&str, usize)>, Error> {
     let prefix = &entries[0].0[..5];
     let pwned = pwned_suffixes(prefix).await?;
     Ok(entries
         .into_iter()
-        .map(|(e, i)| (i, pwned.get(&e[5..]).copied().unwrap_or(0)))
+        .map(|(e, p)| (p, pwned.get(&e[5..]).copied().unwrap_or(0)))
         .collect_vec())
 }
 
@@ -27,15 +24,14 @@ async fn check_prefix(entries: Vec<(String, Id)>) -> Result<Vec<(Id, usize)>, Er
 ///
 /// Given a list of passwords, return a list of `(prefix, items)` with `prefix`
 /// being the prefix of the hashed password and every item being a couple
-/// `(hash, index)` where `index` is the password index in the original list.
-fn hashed_passwords(passwords: &[&str]) -> Vec<Vec<(String, Id)>> {
+/// `(hash, password)`.
+fn hashed_passwords<'a>(passwords: &[&'a str]) -> Vec<Vec<(String, &'a str)>> {
     passwords
         .into_par_iter()
-        .enumerate()
-        .map(|(i, p)| {
+        .map(|p| {
             let mut sha1 = Sha1::default();
             sha1.update(p.as_bytes());
-            (format!("{:X}", sha1.finalize()), Id(i))
+            (format!("{:X}", sha1.finalize()), *p)
         })
         .collect::<Vec<_>>()
         .into_iter()
@@ -46,12 +42,11 @@ fn hashed_passwords(passwords: &[&str]) -> Vec<Vec<(String, Id)>> {
         .collect_vec()
 }
 
-/// Check passwords against HIBP database and return a vector of number of
-/// occurrences in the same order as the original passwords.
-pub async fn check_passwords(
-    passwords: &[&str],
+/// Check passwords against HIBP database and return the number of occurrences.
+pub async fn check_passwords<'a>(
+    passwords: &[&'a str],
     pb: Option<&ProgressBar>,
-) -> Result<Vec<usize>, Error> {
+) -> Result<Vec<(&'a str, usize)>, Error> {
     let occurrences = future::join_all(hashed_passwords(passwords).into_iter().map(|entries| {
         let len = entries.len();
         check_prefix(entries).map(move |result| {
@@ -63,13 +58,8 @@ pub async fn check_passwords(
     }))
     .await
     .into_iter()
-    .collect::<Result<Vec<_>, _>>()?;
-    let result = occurrences
-        .into_iter()
-        .flatten()
-        .sorted()
-        .map(|(_, n)| n)
-        .collect_vec();
+    .collect::<Result<Vec<Vec<(&str, usize)>>, _>>()?;
+    let result = occurrences.into_iter().flatten().collect_vec();
     Ok(result)
 }
 
