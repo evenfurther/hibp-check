@@ -12,16 +12,12 @@ kdbx4 = "0.4.2"
 rpassword = "5.0.1"
 futures = "0.3.17"
 rayon = "1.5.1"
-num_cpus = "1.13.0"
 lazy_static = "1.4.0"
+sha-1 = "0.9.8"
 
 [dependencies.clap]
 features = ["yaml"]
 version = "2.33.3"
-
-[dependencies.sha1]
-features = ["std"]
-version = "0.6.0"
 
 [dependencies.reqwest]
 features = ["gzip"]
@@ -30,3 +26,5 @@ version = "0.11.6"
 [dependencies.tokio]
 version = "1.13.0"
 features = ["macros", "rt-multi-thread"]
+
+[features]

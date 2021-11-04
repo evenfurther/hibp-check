@@ -4,7 +4,7 @@ use futures::future::{self, FutureExt};
 use indicatif::ProgressBar;
 use itertools::Itertools;
 use rayon::prelude::*;
-use sha1::Sha1;
+use sha1::{Digest, Sha1};
 use std::collections::hash_map::HashMap;
 use std::str;
 
@@ -23,36 +23,19 @@ async fn check_prefix(entries: Vec<(String, Id)>) -> Result<Vec<(Id, usize)>, Er
         .collect_vec())
 }
 
-/// Split a `0..len` range into `parts` equal ranges (the last
-/// one might be smaller).
-fn split_range(len: usize, parts: usize) -> Vec<std::ops::Range<usize>> {
-    let size = (len + parts - 1) / parts;
-    (0..parts)
-        .map(|part| part * size..((part + 1) * size).min(len))
-        .collect()
-}
-
 /// Group passwords by hash prefix.
 ///
 /// Given a list of passwords, return a list of `(prefix, items)` with `prefix`
 /// being the prefix of the hashed password and every item being a couple
 /// `(hash, index)` where `index` is the password index in the original list.
 fn hashed_passwords(passwords: &[&str]) -> Vec<Vec<(String, Id)>> {
-    split_range(passwords.len(), num_cpus::get())
+    passwords
         .into_par_iter()
-        .flat_map(|range| {
-            let mut sha1 = Sha1::new();
-            let start = range.start;
-            passwords[range]
-                .iter()
-                .enumerate()
-                .map(|(i, p)| (Id(i + start), p))
-                .map(|(i, &p)| {
-                    sha1.reset();
-                    sha1.update(p.as_bytes());
-                    (sha1.hexdigest().to_uppercase(), i)
-                })
-                .collect_vec()
+        .enumerate()
+        .map(|(i, p)| {
+            let mut sha1 = Sha1::default();
+            sha1.update(p.as_bytes());
+            (format!("{:X}", sha1.finalize()), Id(i))
         })
         .collect::<Vec<_>>()
         .into_iter()
