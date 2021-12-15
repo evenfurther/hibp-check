@@ -13,7 +13,7 @@ rpassword = "5.0.1"
 futures = "0.3.18"
 rayon = "1.5.1"
 lazy_static = "1.4.0"
-sha-1 = "0.9.8"
+sha-1 = "0.10.0"
 
 [dependencies.clap]
 features = ["yaml"]
