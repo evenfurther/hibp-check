@@ -17,11 +17,11 @@ sha-1 = "0.9.8"
 
 [dependencies.clap]
 features = ["yaml"]
-version = "2.33.3"
+version = "2.34.0"
 
 [dependencies.reqwest]
 features = ["gzip"]
-version = "0.11.6"
+version = "0.11.7"
 
 [dependencies.tokio]
 version = "1.14.0"
