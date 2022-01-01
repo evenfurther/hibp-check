@@ -16,8 +16,8 @@ lazy_static = "1.4.0"
 sha-1 = "0.10.0"
 
 [dependencies.clap]
-features = ["yaml"]
-version = "2.34.0"
+features = ["cargo"]
+version = "3.0.0"
 
 [dependencies.reqwest]
 features = ["gzip"]

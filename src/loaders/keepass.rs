@@ -1,8 +1,16 @@
 use super::Entry;
 use anyhow::Error;
-use clap::ArgMatches;
+use clap::{arg, App, ArgMatches};
 use kdbx4::{CompositeKey, Kdbx4};
 use std::path::Path;
+
+pub fn cli() -> App<'static> {
+    App::new("keepass")
+        .arg(arg!(-a --"ask-password" "Get the password from the terminal"))
+        .arg(arg!(-k --"key-file" [FILE] "The optional key file"))
+        .arg(arg!(-p --password "The optional password (unsafe on the command line)"))
+        .arg(arg!(<FILE> "The file containing the passwords to check"))
+}
 
 pub fn load_entries<P1: AsRef<Path>, P2: AsRef<Path>>(
     file: P1,

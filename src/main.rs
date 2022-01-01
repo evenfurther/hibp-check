@@ -1,5 +1,5 @@
 use anyhow::Error;
-use clap::{load_yaml, App};
+use clap::{app_from_crate, arg, AppSettings};
 use indicatif::ProgressBar;
 use itertools::Itertools;
 use std::{cmp::Reverse, collections::HashMap};
@@ -9,8 +9,11 @@ mod network;
 
 #[tokio::main]
 pub async fn main() -> Result<(), Error> {
-    let yaml = load_yaml!("cli.yml");
-    let matches = App::from_yaml(yaml).get_matches();
+    let app = app_from_crate!()
+      .arg(arg!(-s --"show-password" "Show the pwned passwords in output. If absent, line number or identifying information will be"))
+      .subcommand(loaders::keepass::cli())
+      .setting(AppSettings::SubcommandRequiredElseHelp);
+    let matches = app.get_matches();
     let mut entries = Vec::new();
     if let Some(matches) = matches.subcommand_matches("keepass") {
         entries = loaders::keepass::load_from_subcommand(matches)?;
