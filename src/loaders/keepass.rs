@@ -1,11 +1,11 @@
 use super::Entry;
 use anyhow::Error;
-use clap::{arg, App, ArgMatches};
+use clap::{arg, ArgMatches, Command};
 use kdbx4::{CompositeKey, Kdbx4};
 use std::path::Path;
 
-pub fn cli() -> App<'static> {
-    App::new("keepass")
+pub fn cli() -> Command<'static> {
+    Command::new("keepass")
         .arg(arg!(-a --"ask-password" "Get the password from the terminal"))
         .arg(arg!(-k --"key-file" [FILE] "The optional key file"))
         .arg(arg!(-p --password "The optional password (unsafe on the command line)"))
