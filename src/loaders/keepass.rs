@@ -32,7 +32,7 @@ pub fn load_entries<P1: AsRef<Path>, P2: AsRef<Path>>(
 
 pub fn load_from_subcommand(matches: &ArgMatches) -> Result<Vec<Entry>, Error> {
     let password = if matches.occurrences_of("ask-password") > 0 {
-        rpassword::read_password_from_tty(Some("Enter keepass file password: "))?
+        rpassword::prompt_password("Enter keepass file password: ")?
     } else {
         matches.value_of("password").unwrap_or("").to_owned()
     };
