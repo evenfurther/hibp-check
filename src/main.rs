@@ -23,7 +23,7 @@ pub async fn main() -> Result<(), Error> {
         .await?
         .into_iter()
         .collect::<HashMap<_, _>>();
-    let show_passwords = matches.occurrences_of("password") > 0;
+    let show_passwords = matches.is_present("show-password");
     for (entry, occurrences) in entries
         .iter()
         .map(|e| (e, pwned[e.password.as_str()]))
