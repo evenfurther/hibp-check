@@ -9,7 +9,7 @@ mod network;
 #[tokio::main]
 pub async fn main() -> Result<(), Error> {
     let app = clap::command!()
-      .arg(clap::arg!(-s --"show-password" "Show the pwned passwords in output. If absent, line number or identifying information will be"))
+      .arg(clap::arg!(-s --"show-password" "Show the pwned passwords in output. If absent, line number or identifying information will be").global(true))
       .subcommand(loaders::keepass::cli())
       .subcommand_required(true);
     let matches = app.get_matches();
