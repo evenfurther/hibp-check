@@ -1,15 +1,23 @@
 use super::Entry;
 use anyhow::Error;
-use clap::{arg, ArgMatches, Command};
+use clap::Parser;
 use kdbx4::{CompositeKey, Kdbx4};
-use std::path::Path;
+use std::path::{Path, PathBuf};
 
-pub fn cli() -> Command<'static> {
-    Command::new("keepass")
-        .arg(arg!(-a --"ask-password" "Get the password from the terminal"))
-        .arg(arg!(-k --"key-file" [FILE] "The optional key file"))
-        .arg(arg!(-p --password "The optional password (unsafe on the command line)"))
-        .arg(arg!(<FILE> "The file containing the passwords to check"))
+/// keepass
+#[derive(Parser)]
+pub struct Args {
+    /// Get the password from the terminal
+    #[clap(short, long)]
+    ask_password: bool,
+    /// The optional key file
+    #[clap(short, long)]
+    key_file: Option<PathBuf>,
+    /// The optional password (unsafe on the command line)
+    #[clap(short, long)]
+    password: Option<String>,
+    /// The file containing the passwords to check
+    file: PathBuf,
 }
 
 pub fn load_entries<P1: AsRef<Path>, P2: AsRef<Path>>(
@@ -30,19 +38,19 @@ pub fn load_entries<P1: AsRef<Path>, P2: AsRef<Path>>(
         .collect()
 }
 
-pub fn load_from_subcommand(matches: &ArgMatches) -> Result<Vec<Entry>, Error> {
-    let password = if matches.occurrences_of("ask-password") > 0 {
+pub fn load_from_subcommand(args: &Args) -> Result<Vec<Entry>, Error> {
+    let password = if args.ask_password {
         rpassword::prompt_password("Enter keepass file password: ")?
     } else {
-        matches.value_of("password").unwrap_or("").to_owned()
+        args.password.clone().unwrap_or_default()
     };
     load_entries(
-        matches.value_of("FILE").unwrap(),
+        &args.file,
         if password.is_empty() {
             None
         } else {
             Some(&password)
         },
-        matches.value_of("key-file"),
+        args.key_file.as_ref(),
     )
 }
