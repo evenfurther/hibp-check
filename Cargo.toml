@@ -7,7 +7,7 @@ edition = "2021"
 [dependencies]
 anyhow = "1.0.64"
 indicatif = "0.17.0"
-itertools = "0.10.3"
+itertools = "0.10.5"
 kdbx4 = "0.5.1"
 rpassword = "7.0.0"
 futures = "0.3.24"
