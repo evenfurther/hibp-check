@@ -7,7 +7,7 @@ edition = "2021"
 [dependencies]
 anyhow = "1.0.64"
 indicatif = "0.17.0"
-itertools = "0.10.3"
+itertools = "0.10.5"
 kdbx4 = "0.5.1"
 rpassword = "7.0.0"
 futures = "0.3.24"
@@ -17,14 +17,14 @@ sha-1 = "0.10.0"
 
 [dependencies.clap]
 features = ["derive"]
-version = "3.2.20"
+version = "4.0.16"
 
 [dependencies.reqwest]
 features = ["gzip"]
 version = "0.11.11"
 
 [dependencies.tokio]
-version = "1.21.0"
+version = "1.21.2"
 features = ["macros", "rt-multi-thread"]
 
 [features]
