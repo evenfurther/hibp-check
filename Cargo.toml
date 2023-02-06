@@ -5,7 +5,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-anyhow = "1.0.68"
+anyhow = "1.0.69"
 indicatif = "0.17.3"
 itertools = "0.10.5"
 kdbx4 = "0.5.1"
