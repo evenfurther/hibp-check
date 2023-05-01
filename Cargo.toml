@@ -21,7 +21,7 @@ version = "4.2.0"
 
 [dependencies.reqwest]
 features = ["gzip"]
-version = "0.11.16"
+version = "0.11.17"
 
 [dependencies.tokio]
 version = "1.24.2"
