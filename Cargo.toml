@@ -6,7 +6,7 @@ edition = "2021"
 
 [dependencies]
 anyhow = "1.0.70"
-indicatif = "0.17.3"
+indicatif = "0.17.4"
 itertools = "0.10.5"
 kdbx4 = "0.5.1"
 rpassword = "7.2.0"
@@ -17,7 +17,7 @@ sha-1 = "0.10.1"
 
 [dependencies.clap]
 features = ["derive"]
-version = "4.2.0"
+version = "4.3.0"
 
 [dependencies.reqwest]
 features = ["gzip"]
