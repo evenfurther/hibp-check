@@ -1,3 +1,3 @@
 {
-  "extends": ["config:recommended", ":automergePr", ":automergeRequireAllStatusChecks"]
+  "extends": ["config:recommended", ":automergeMinor", ":automergePr", ":automergeRequireAllStatusChecks"]
 }
