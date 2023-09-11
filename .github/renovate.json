@@ -1,4 +1,3 @@
 {
-    "extends": ["config:recommended", ":automergeMinor", ":automergePr", ":automergeRequireAllStatusChecks"],
-    "automergeStrategy": "rebase",
+    "extends": ["config:recommended", ":automergeMinor", ":automergePr"],
 }
