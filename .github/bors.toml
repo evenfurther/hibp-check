@@ -1,5 +1,0 @@
-status = [
-  "Check", "Rustfmt", "Clippy",
-  "Test Suite (stable)", "Test Suite (beta)", "Test Suite (nightly)"
-]
-delete_merged_branches = true
