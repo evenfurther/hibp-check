@@ -22,7 +22,7 @@ fn common_prefix(entries: &[Entry]) -> Option<String> {
 pub fn remove_common_prefix(entries: &mut [Entry]) {
     if let Some(prefix) = common_prefix(entries) {
         let trim = prefix.len();
-        for e in entries.iter_mut() {
+        for e in entries {
             e.designator = e.designator.chars().skip(trim).collect();
         }
     }
