@@ -1,8 +1,7 @@
 on:
   push:
     branches:
-      - staging
-      - trying
+      - renovate/**
   pull_request:
   merge_group:
 
