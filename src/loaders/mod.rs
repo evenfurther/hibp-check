@@ -5,7 +5,7 @@ pub struct Entry {
 }
 
 fn common_prefix(entries: &[Entry]) -> Option<String> {
-    let first = &entries.get(0)?.designator;
+    let first = &entries.first()?.designator;
     for (i, _) in first.rmatch_indices('/') {
         let prefix = &first[0..=i];
         if entries
