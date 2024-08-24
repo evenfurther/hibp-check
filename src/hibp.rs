@@ -35,7 +35,7 @@ fn hashed_passwords<'a>(passwords: &[&'a str]) -> Vec<Vec<(String, &'a str)>> {
         .collect::<Vec<_>>()
         .into_iter()
         .sorted()
-        .group_by(|(sha, _)| sha.chars().take(5).collect::<String>())
+        .chunk_by(|(sha, _)| sha.chars().take(5).collect::<String>())
         .into_iter()
         .map(|(_, e)| e.collect_vec())
         .collect_vec()
