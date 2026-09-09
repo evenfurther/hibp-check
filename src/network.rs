@@ -23,7 +23,7 @@ pub async fn hibp_network_request(prefix: &str) -> Result<String, Error> {
     ensure!(
         response.status().is_success(),
         "received error status code for {}: {}",
-        &url,
+        url,
         response.status()
     );
     Ok(response.text().await?)
